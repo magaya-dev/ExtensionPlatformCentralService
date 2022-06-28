@@ -27,6 +27,8 @@ namespace ExtensionsPlatform.DataStorageClient
         Task ReplaceItemAsync<T>(Container container, string id, T item) where T : IEntity;
         Task UpsertItemAsync<T>(Container container, T item) where T : IEntity;
         Task<ItemResponse<T>> UpdateItemAsync<T>(Container container, T item) where T : IEntity;
+
+        Task<IEnumerable<string>> GetItemsPK<T>(Container container, Expression<Func<T, string>> predicate);
     }
 
     public class CosmosDBStorageClient : ICosmosDBStorageClient
@@ -83,6 +85,8 @@ namespace ExtensionsPlatform.DataStorageClient
                 throw exc;
             }
         }
+
+
 
         public Task<T> GetItemBy<T>(Container container, Expression<Func<T, bool>> predicate) => GetItemBy(container, predicate, t => t);
 
@@ -155,6 +159,36 @@ namespace ExtensionsPlatform.DataStorageClient
 
             return items;
         }
+
+
+
+
+        public Task<IEnumerable<string>> GetItemsPK<T>(Container container, Expression<Func<T, string>> predicate) => GetItemsPKBy(container, predicate);
+
+        public async Task<IEnumerable<string>> GetItemsPKBy<T>(Container container, Expression<Func<T, string>> predicate)
+        {
+            var items = new List<string>();
+            FeedIterator<string> feedIterator;
+            var query = container.GetItemLinqQueryable<T>();
+            
+                feedIterator = query.Select(predicate).Distinct().ToFeedIterator();
+
+            //Asynchronous query execution
+            while (feedIterator.HasMoreResults)
+            {
+                FeedResponse<string> currentResultSet = await feedIterator.ReadNextAsync().ConfigureAwait(false);
+                foreach (string item in currentResultSet)
+                {
+                    items.Add(item);
+                }
+            }
+
+            return items;
+        }
+
+
+
+
 
         public async Task<T> DeleteItemAsync<T>(Container container, string id, T item) where T : IEntity
         {

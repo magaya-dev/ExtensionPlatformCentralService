@@ -17,6 +17,8 @@ namespace ExtensionsPlatform.Application.ExtensionCompany
         Task<CompanyEntity> GetExtensionCompanyData(string networkId, string extName);
         Task UpdateExtensionCompanyData(CompanyEntity entrydata);
         Task UpdateExtensionVersion(ExtCompanyVersionInfo entrydata);
+        Task<IEnumerable<string>> GetNetworkIdList();
+        Task<IEnumerable<CompanyEntity>> GetAllExtensionByNetworkId(string networkId);
     }
 
 
@@ -49,7 +51,7 @@ namespace ExtensionsPlatform.Application.ExtensionCompany
                     ExtensionName = entrydata.ExtensionName,
                     ExtId = entrydata.ExtId,
                     CreatedDate = DateTime.Now,
-                    UpdatedDate = null,
+                    UpdatedDate = DateTime.Now,
                     Status = StatusExtension.Online,
                     MgyGateWay =  string.IsNullOrEmpty(await _mgyGateWay.GetMgyCompanyEndpoint(entrydata.NetworkId, entrydata.ExtId)) ?
                         false : true
@@ -100,6 +102,11 @@ namespace ExtensionsPlatform.Application.ExtensionCompany
                 throw new ExistsExtensionCompanyException();
 
             return extCompanyData;
+        }
+
+        public async Task<IEnumerable<string>> GetNetworkIdList()
+        {
+            return await _extensionCompanyCosmoRepo.GetCompaniesPartitionKey();
         }
 
         public async Task UpdateExtensionCompanyData(CompanyEntity entrydata)

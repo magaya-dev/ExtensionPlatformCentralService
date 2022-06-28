@@ -16,6 +16,8 @@ namespace ExtensionsPlatform.Repo
         Task<IEnumerable<CompanyEntity>> GetCompaniesDataBy(string networkId);
         Task<CompanyEntity> GetCompanyDataBy(string networkId, string extensionName);
         Task DeleteCompanyData(CompanyEntity company);
+
+        Task<IEnumerable<string>> GetCompaniesPartitionKey();
     }
 
 
@@ -52,6 +54,11 @@ namespace ExtensionsPlatform.Repo
         public Task<IEnumerable<CompanyEntity>> GetCompaniesDataBy(string networkId)
         {
             return _dataStorageClient.GetItemsBy<CompanyEntity>(_container, inv => inv.NetworkId == networkId);
+        }
+
+        public Task<IEnumerable<string>> GetCompaniesPartitionKey()
+        {
+            return _dataStorageClient.GetItemsPK<CompanyEntity>(_container, e => e.PartitionKey);
         }
 
         public Task<CompanyEntity> GetCompanyDataBy(string networkId, string extensionName)
