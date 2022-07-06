@@ -12,6 +12,8 @@ namespace ExtensionsPlatform
 
         public string CosmosDbName { get; set; }
 
+        public int TimerMinutes { get; set; }
+
         //public string AzureWebJobsStorage { get; set; }
     }
 }
