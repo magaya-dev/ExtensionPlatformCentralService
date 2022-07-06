@@ -4,12 +4,12 @@ using Xunit;
 
 namespace ExtensionsPlatform.UnitTest
 {
-    [TestClass]
     public class UnitTest1
     {
         [Fact]
         public void TestMethod1()
         {
+            Assert.IsTrue(2 == 2);
         }
     }
 }

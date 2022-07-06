@@ -71,8 +71,8 @@ namespace ExtensionsPlatform.Application.ExtensionCompany
             {
                 var extCompanyData = await _extensionCompanyCosmoRepo.GetCompanyDataBy(entrydata.NetworkId, entrydata.ExtensionName).ConfigureAwait(false);
 
-                if (extCompanyData != null)
-                    throw new ExistsExtensionCompanyException();
+                if (extCompanyData == null)
+                    throw new NotExistsExtensionCompanyException();
 
                 extCompanyData.Version = entrydata.CurrentVersion;
                 extCompanyData.Latest = entrydata.UpdateAvailable;
@@ -99,7 +99,7 @@ namespace ExtensionsPlatform.Application.ExtensionCompany
             var extCompanyData = await _extensionCompanyCosmoRepo.GetCompaniesDataBy(networkId);
 
             if (extCompanyData == null || !extCompanyData.Any())
-                throw new ExistsExtensionCompanyException();
+                throw new NotExistsExtensionCompanyException();
 
             return extCompanyData;
         }

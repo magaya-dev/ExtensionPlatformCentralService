@@ -13,7 +13,6 @@ namespace ExtensionsPlatform.Application.MgyGateway
     public interface IMgyGateWay
     {
         Task<string> GetMgyCompanyEndpoint(string networkId, string extId);
-        //Task<string> GetMgyCompanyEndpointLocal(string networkId);
     }
 
 
@@ -29,8 +28,7 @@ namespace ExtensionsPlatform.Application.MgyGateway
         }
 
         private static ConcurrentDictionary<string, string> _gatewayPathByNetworkId = new ConcurrentDictionary<string, string>();
-        private static ConcurrentDictionary<string, string> _gatewayPathByNetworkIdLocal = new ConcurrentDictionary<string, string>();
-
+        
         public async Task<string> GetMgyCompanyEndpoint(string networkId,string extId)
         {
             string connection;
@@ -54,27 +52,5 @@ namespace ExtensionsPlatform.Application.MgyGateway
             return null;
         }
 
-        public async Task<string> GetMgyCompanyEndpointLocal(string networkId)
-        {
-            string connection;
-            if (_gatewayPathByNetworkIdLocal.TryGetValue(networkId, out connection))
-            {
-                return connection;
-            }
-
-            var mgyGatewayEndpoint = _settings.Value.MgyGatewayEndpoint;
-            var targetUri = string.Format(mgyGatewayEndpoint, networkId);
-            // TODO: CACHE this
-            var response = await _client.GetAsync(targetUri).ConfigureAwait(false);
-            if (response.IsSuccessStatusCode)
-            {
-                var responseStream = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                ExtensionEndPoint extensionEndPoint = JsonConvert.DeserializeObject<ExtensionEndPoint>(responseStream);
-                _gatewayPathByNetworkIdLocal.TryAdd(networkId, extensionEndPoint?.Local);
-                return extensionEndPoint?.Local;
-            }
-
-            return null;
-        }
     }
 }
