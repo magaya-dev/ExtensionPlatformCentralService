@@ -11,11 +11,11 @@ namespace ExtensionsPlatform.Repo
 {
     public interface IExtensionCompanyCosmoRepo
     {
-        Task<CompanyEntity> AddNewCompanyDataAsync(CompanyEntity entity);
-        Task UpdateCompanyDataAsync(CompanyEntity entity);
-        Task<IEnumerable<CompanyEntity>> GetCompaniesDataBy(string networkId);
-        Task<CompanyEntity> GetCompanyDataBy(string networkId, string extensionName);
-        Task DeleteCompanyData(CompanyEntity company);
+        Task<ExtensionCompanyEntity> AddNewCompanyDataAsync(ExtensionCompanyEntity entity);
+        Task UpdateCompanyDataAsync(ExtensionCompanyEntity entity);
+        Task<IEnumerable<ExtensionCompanyEntity>> GetCompaniesDataBy(string networkId);
+        Task<ExtensionCompanyEntity> GetCompanyDataBy(string networkId, string extensionName);
+        Task DeleteCompanyData(ExtensionCompanyEntity company);
 
         Task<IEnumerable<string>> GetCompaniesPartitionKey();
     }
@@ -25,7 +25,7 @@ namespace ExtensionsPlatform.Repo
     {
         private readonly ICosmosDBStorageClient _dataStorageClient;
         private readonly Container _container;
-        private readonly string DB_Company_CONTAINER = "Companies";
+        private readonly string DB_Company_CONTAINER = "ExtensionCompany";
         private readonly ILogger<ExtensionCompanyCosmoRepo> _logger;
 
         public ExtensionCompanyCosmoRepo(ICosmosDBStorageClient dataStorageClient,
@@ -36,7 +36,7 @@ namespace ExtensionsPlatform.Repo
             _logger = logger;
         }
 
-        public async Task<CompanyEntity> AddNewCompanyDataAsync(CompanyEntity entity)
+        public async Task<ExtensionCompanyEntity> AddNewCompanyDataAsync(ExtensionCompanyEntity entity)
         {
             var result = await _dataStorageClient.AddItemAsync(_container, entity);
             if (result == null)
@@ -46,30 +46,30 @@ namespace ExtensionsPlatform.Repo
             return result.Resource;
         }
 
-        public Task UpdateCompanyDataAsync(CompanyEntity entity)
+        public Task UpdateCompanyDataAsync(ExtensionCompanyEntity entity)
         {
             return _dataStorageClient.UpsertItemAsync(_container, entity);
         }
 
-        public Task<IEnumerable<CompanyEntity>> GetCompaniesDataBy(string networkId)
+        public Task<IEnumerable<ExtensionCompanyEntity>> GetCompaniesDataBy(string networkId)
         {
-            return _dataStorageClient.GetItemsBy<CompanyEntity>(_container, inv => inv.NetworkId == networkId);
+            return _dataStorageClient.GetItemsBy<ExtensionCompanyEntity>(_container, inv => inv.NetworkId == networkId);
         }
 
         public Task<IEnumerable<string>> GetCompaniesPartitionKey()
         {
-            return _dataStorageClient.GetItemsPK<CompanyEntity>(_container, e => e.PartitionKey);
+            return _dataStorageClient.GetItemsPK<ExtensionCompanyEntity>(_container, e => e.PartitionKey);
         }
 
-        public Task<CompanyEntity> GetCompanyDataBy(string networkId, string extensionName)
+        public Task<ExtensionCompanyEntity> GetCompanyDataBy(string networkId, string extensionName)
         {
-            return _dataStorageClient.GetItemBy<CompanyEntity>(_container, inv => inv.NetworkId == networkId && inv.ExtensionName == extensionName);
+            return _dataStorageClient.GetItemBy<ExtensionCompanyEntity>(_container, inv => inv.NetworkId == networkId && inv.ExtensionName == extensionName);
         }
 
 
-        public Task DeleteCompanyData(CompanyEntity company)
+        public Task DeleteCompanyData(ExtensionCompanyEntity company)
         {
-            return _dataStorageClient.DeleteItemAsync<CompanyEntity>(_container, company.CompanyId, company);
+            return _dataStorageClient.DeleteItemAsync<ExtensionCompanyEntity>(_container, company.CompanyId, company);
         }
     }
 }

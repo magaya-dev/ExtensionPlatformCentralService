@@ -41,7 +41,7 @@ namespace ExtensionsPlatform.UnitTest.Application
                 ExtId = "catapult"
             };
 
-            var extCompanyData = new CompanyEntity
+            var extCompanyData = new ExtensionCompanyEntity
             {
                 CompanyId = Guid.NewGuid().ToString(),
                 NetworkId = entry.NetworkId,
@@ -74,7 +74,7 @@ namespace ExtensionsPlatform.UnitTest.Application
                 ExtId = "catapult"
             };
 
-            var extCompanyData = new CompanyEntity
+            var extCompanyData = new ExtensionCompanyEntity
             {
                 CompanyId = Guid.NewGuid().ToString(),
                 NetworkId = entry.NetworkId,
@@ -91,11 +91,11 @@ namespace ExtensionsPlatform.UnitTest.Application
             };
 
             var user = _extRepo.Setup(arg => arg.GetCompanyDataBy(It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync((CompanyEntity)null);
+                .ReturnsAsync((ExtensionCompanyEntity)null);
 
             var response = await _companyService.CreateExtensionCompany(entry);
 
-            _extRepo.Verify(repo => repo.AddNewCompanyDataAsync(It.Is<CompanyEntity>(e => 
+            _extRepo.Verify(repo => repo.AddNewCompanyDataAsync(It.Is<ExtensionCompanyEntity>(e => 
             e.NetworkId == entry.NetworkId &&
             e.CompanyName == entry.CompanyName &&
             e.ExtensionName == entry.ExtensionName &&
@@ -116,7 +116,7 @@ namespace ExtensionsPlatform.UnitTest.Application
             };
 
             var user = _extRepo.Setup(arg => arg.GetCompanyDataBy(It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync((CompanyEntity)null);
+                .ReturnsAsync((ExtensionCompanyEntity)null);
 
             await Assert.ThrowsAsync<NotExistsExtensionCompanyException>(async () => await _companyService.UpdateExtensionVersion(entry));
         }
@@ -132,7 +132,7 @@ namespace ExtensionsPlatform.UnitTest.Application
                 UpdateAvailable = true
             };
 
-            var extCompanyData = new CompanyEntity
+            var extCompanyData = new ExtensionCompanyEntity
             {
                 CompanyId = Guid.NewGuid().ToString(),
                 NetworkId = entry.NetworkId,
@@ -153,7 +153,7 @@ namespace ExtensionsPlatform.UnitTest.Application
 
             await _companyService.UpdateExtensionVersion(entry);
 
-            _extRepo.Verify(repo => repo.UpdateCompanyDataAsync(It.Is<CompanyEntity>(e =>
+            _extRepo.Verify(repo => repo.UpdateCompanyDataAsync(It.Is<ExtensionCompanyEntity>(e =>
             e.NetworkId == entry.NetworkId &&
             e.CompanyName == extCompanyData.CompanyName &&
             e.ExtensionName == entry.ExtensionName &&
@@ -168,7 +168,7 @@ namespace ExtensionsPlatform.UnitTest.Application
             var networkId = "36760";
             var extName = "Rate Managment";
 
-            var extCompanyData = new CompanyEntity
+            var extCompanyData = new ExtensionCompanyEntity
             {
                 CompanyId = Guid.NewGuid().ToString(),
                 NetworkId = networkId,
@@ -198,7 +198,7 @@ namespace ExtensionsPlatform.UnitTest.Application
             var networkId = "21458";
 
             var data = _extRepo.Setup(arg => arg.GetCompaniesDataBy(It.IsAny<string>()))
-                .ReturnsAsync((IEnumerable<CompanyEntity>)null);
+                .ReturnsAsync((IEnumerable<ExtensionCompanyEntity>)null);
 
             await Assert.ThrowsAsync<NotExistsExtensionCompanyException>(async () => await _companyService.GetAllExtensionByNetworkId(networkId));
         }
@@ -208,9 +208,9 @@ namespace ExtensionsPlatform.UnitTest.Application
         {
             var networkId = "36760";
 
-            var extCompanyDataList = new CompanyEntity[]
+            var extCompanyDataList = new ExtensionCompanyEntity[]
             {
-                new CompanyEntity 
+                new ExtensionCompanyEntity 
                 {
                     CompanyId = Guid.NewGuid().ToString(),
                     NetworkId = networkId,
@@ -241,7 +241,7 @@ namespace ExtensionsPlatform.UnitTest.Application
             var networkId = "36760";
             var extName = "Rate Managment";
 
-            var extCompanyData = new CompanyEntity
+            var extCompanyData = new ExtensionCompanyEntity
             {
                 CompanyId = Guid.NewGuid().ToString(),
                 NetworkId = networkId,
@@ -257,11 +257,11 @@ namespace ExtensionsPlatform.UnitTest.Application
                 UpdatedDate = DateTime.Parse("6/28/2022 5:21:58 PM")
             };
 
-            _extRepo.Setup(arg => arg.UpdateCompanyDataAsync(It.IsAny<CompanyEntity>())).Verifiable();
+            _extRepo.Setup(arg => arg.UpdateCompanyDataAsync(It.IsAny<ExtensionCompanyEntity>())).Verifiable();
 
             await _companyService.UpdateExtensionCompanyData(extCompanyData);
 
-            _extRepo.Verify(repo => repo.UpdateCompanyDataAsync(It.Is<CompanyEntity>(e =>
+            _extRepo.Verify(repo => repo.UpdateCompanyDataAsync(It.Is<ExtensionCompanyEntity>(e =>
             e.ExtId == extCompanyData.ExtId &&
             e.Version == extCompanyData.Version &&
             e.Latest == extCompanyData.Latest)));

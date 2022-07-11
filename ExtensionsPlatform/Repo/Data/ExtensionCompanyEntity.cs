@@ -7,7 +7,7 @@ using System.Text;
 
 namespace ExtensionsPlatform.Repo.Data
 {
-    public class CompanyEntity : IEntity
+    public class ExtensionCompanyEntity : IEntity
     {
         [JsonProperty("_etag")]
         public string ETag { get; set; }
@@ -37,5 +37,4 @@ namespace ExtensionsPlatform.Repo.Data
         Online,
         Off_Line
     }
-    public enum PaymentAction { transactionCreated, transactionEdited, transactionDeleted }
 }

@@ -12,7 +12,7 @@ namespace ExtensionsPlatform.Application.ExtensionCompany
 {
     public interface IWebhookMgyExtensionDispatcher
     {
-        Task Dispatch(CompanyEntity extCompany);
+        Task Dispatch(ExtensionCompanyEntity extCompany);
     }
 
 
@@ -35,7 +35,7 @@ namespace ExtensionsPlatform.Application.ExtensionCompany
         }
 
         // Dispatch - Reques Magaya EndPOint
-        public async Task Dispatch(CompanyEntity extCompany)
+        public async Task Dispatch(ExtensionCompanyEntity extCompany)
         {
             try
             {

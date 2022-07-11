@@ -1,4 +1,5 @@
-﻿using ExtensionsPlatform.Application.ExtensionCompany;
+﻿using ExtensionsPlatform.Application.ExtensionActiveAction;
+using ExtensionsPlatform.Application.ExtensionCompany;
 using ExtensionsPlatform.Application.MgyGateway;
 using ExtensionsPlatform.DataStorageClient;
 using ExtensionsPlatform.Repo;
@@ -42,6 +43,8 @@ namespace ExtensionsPlatform
 
             builder.Services.AddSingleton<IWebhookMgyExtensionDispatcher, WebhookMgyExtensionDispatcher>();
 
+            builder.Services.AddSingleton<IActiveExtensionCosmoRepo, ActiveExtensionCosmoRepo>();
+            builder.Services.AddSingleton<IActivarExtensionService, ActivarExtensionService>();
         }
     }
 }

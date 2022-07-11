@@ -6,7 +6,7 @@ namespace ExtensionsPlatform.Application.Exception
 {
     public class NotExistsExtensionCompanyException : BaseException
     {
-        public NotExistsExtensionCompanyException() : base("Extension Company data already exist")
+        public NotExistsExtensionCompanyException() : base("Extension Company data does not exist")
         {
         }
     }
